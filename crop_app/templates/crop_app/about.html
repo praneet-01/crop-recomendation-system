@@ -1,0 +1,51 @@
+{% extends 'crop_app/base.html' %}
+{% block title %}About — CropSense{% endblock %}
+
+{% block content %}
+<section class="py-6">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="section-header text-center mb-5">
+          <h2 class="section-title">About CropSense</h2>
+          <p class="section-subtitle">A final year engineering project in AI-powered precision agriculture</p>
+        </div>
+
+        <div class="cs-card mb-4">
+          <div class="cs-card-body">
+            <h5>🎯 Project Objective</h5>
+            <p>CropSense is a machine learning-based web application that helps farmers and agricultural professionals select the most suitable crop based on real-time environmental and soil conditions. By leveraging a Random Forest classifier trained on thousands of crop data points, the system provides accurate recommendations instantly.</p>
+
+            <h5 class="mt-4">🤖 Machine Learning Model</h5>
+            <p>The system uses a <strong>Random Forest Classifier</strong> trained on the Crop Recommendation Dataset. The model achieved approximately <strong>99% accuracy</strong> on test data, making it highly reliable for real-world use.</p>
+            <ul>
+              <li>Algorithm: Random Forest (Scikit-learn)</li>
+              <li>Features: N, P, K, Temperature, Humidity, pH, Rainfall</li>
+              <li>Output: One of 22 crop types</li>
+              <li>Training accuracy: ~99%</li>
+            </ul>
+
+            <h5 class="mt-4">🛠 Tech Stack</h5>
+            <div class="row g-2 mt-2">
+              {% for tech in techs %}
+              <div class="col-6 col-md-3">
+                <div class="tech-badge">{{ tech }}</div>
+              </div>
+              {% endfor %}
+            </div>
+
+            <h5 class="mt-4">🚀 Future Scope</h5>
+            <ul>
+              <li>Integration with real-time weather APIs</li>
+              <li>Mobile app for field use</li>
+              <li>Crop yield prediction module</li>
+              <li>Fertilizer recommendation system</li>
+              <li>Multi-language support for regional farmers</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

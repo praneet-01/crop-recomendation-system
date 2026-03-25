@@ -1,0 +1,157 @@
+{% extends 'crop_app/base.html' %}
+{% block title %}CropSense — Smart Crop Recommendation{% endblock %}
+
+{% block content %}
+
+<!-- ── HERO ──────────────────────────────────────────────────────────── -->
+<section class="hero-section">
+  <div class="hero-bg-pattern"></div>
+  <div class="container">
+    <div class="row align-items-center min-vh-90">
+      <div class="col-lg-6 hero-text">
+        <div class="hero-badge mb-4">
+          <span>🤖 ML-Powered · ~99% Accuracy</span>
+        </div>
+        <h1 class="hero-title">
+          Smarter Farming<br>
+          Starts with the<br>
+          <span class="text-gradient">Right Crop</span>
+        </h1>
+        <p class="hero-subtitle">
+          Enter your soil and climate data — our AI model instantly recommends
+          the most suitable crop for your land. Built on Random Forest with real
+          agricultural data.
+        </p>
+        <div class="hero-actions">
+          <a href="{% url 'signup' %}" class="btn cs-btn-primary btn-lg me-3">
+            Get Started Free <i class="bi bi-arrow-right ms-1"></i>
+          </a>
+          <a href="{% url 'login' %}" class="btn cs-btn-outline btn-lg">
+            Sign In
+          </a>
+        </div>
+        <div class="hero-stats mt-5">
+          <div class="stat-item">
+            <span class="stat-number">22+</span>
+            <span class="stat-label">Crop Types</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">99%</span>
+            <span class="stat-label">Accuracy</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">7</span>
+            <span class="stat-label">Parameters</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 hero-visual d-none d-lg-flex">
+        <div class="hero-card-stack">
+          <div class="floating-card card-1">
+            <div class="fc-icon">🌾</div>
+            <div>
+              <div class="fc-label">Recommended</div>
+              <div class="fc-value">Rice</div>
+            </div>
+          </div>
+          <div class="floating-card card-2">
+            <div class="fc-icon">💧</div>
+            <div>
+              <div class="fc-label">Humidity</div>
+              <div class="fc-value">82%</div>
+            </div>
+          </div>
+          <div class="floating-card card-3">
+            <div class="fc-icon">🌡️</div>
+            <div>
+              <div class="fc-label">Temperature</div>
+              <div class="fc-value">24°C</div>
+            </div>
+          </div>
+          <div class="hero-center-icon">🌿</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ───────────────────────────────────────────────────── -->
+<section class="section-how py-6">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Three simple steps to get your crop recommendation</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <div class="step-icon">📊</div>
+          <h5>Enter Soil Data</h5>
+          <p>Provide NPK values, pH, temperature, humidity, and rainfall for your field.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <div class="step-icon">🤖</div>
+          <h5>AI Analyzes</h5>
+          <p>Our Random Forest model, trained on thousands of data points, processes your input instantly.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <div class="step-icon">✅</div>
+          <h5>Get Recommendation</h5>
+          <p>Receive the best crop suited for your conditions along with a description.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PARAMETERS ─────────────────────────────────────────────────────── -->
+<section class="section-params py-6 bg-subtle">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title">What We Analyze</h2>
+      <p class="section-subtitle">7 key parameters for a precise recommendation</p>
+    </div>
+    <div class="row g-3 justify-content-center">
+      {% for param in params %}
+      <div class="col-6 col-md-3 col-lg-auto">
+        <div class="param-badge">
+          <span class="param-icon">{{ param.icon }}</span>
+          <span class="param-name">{{ param.name }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ───────────────────────────────────────────────────────────── -->
+<section class="section-cta py-6">
+  <div class="container text-center">
+    <h2 class="section-title mb-3">Ready to grow smarter?</h2>
+    <p class="section-subtitle mb-4">Create your free account and start predicting in seconds.</p>
+    <a href="{% url 'signup' %}" class="btn cs-btn-primary btn-lg me-3">Create Free Account</a>
+    <a href="{% url 'about' %}" class="btn cs-btn-outline btn-lg">Learn More</a>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Animate hero stats on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('animate-in');
+  });
+});
+document.querySelectorAll('.step-card, .param-badge').forEach(el => observer.observe(el));
+</script>
+{% endblock %}

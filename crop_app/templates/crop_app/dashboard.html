@@ -1,0 +1,182 @@
+{% extends 'crop_app/base.html' %}
+{% block title %}Dashboard — CropSense{% endblock %}
+
+{% block content %}
+<section class="dashboard-section py-5">
+  <div class="container">
+
+    <!-- Page Header -->
+    <div class="page-header mb-4">
+      <div>
+        <h2 class="page-title">Crop Recommendation</h2>
+        <p class="page-subtitle">Enter your soil and climate parameters below</p>
+      </div>
+      <div class="header-badge">
+        <i class="bi bi-lightning-charge-fill text-warning"></i>
+        {{ total_predictions }} prediction{{ total_predictions|pluralize }} made
+      </div>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- ── INPUT FORM ─────────────────────────────────────────────── -->
+      <div class="col-lg-7">
+        <div class="cs-card">
+          <div class="cs-card-header">
+            <h5><i class="bi bi-sliders me-2"></i>Input Parameters</h5>
+            <span class="badge cs-badge-green">7 Parameters</span>
+          </div>
+          <div class="cs-card-body">
+            <form method="POST" id="predictionForm" novalidate>
+              {% csrf_token %}
+
+              <!-- Soil Nutrients -->
+              <div class="param-group mb-4">
+                <div class="param-group-label">
+                  <i class="bi bi-flower1 me-2"></i>Soil Nutrients
+                </div>
+                <div class="row g-3">
+                  <div class="col-sm-4">
+                    <label class="form-label">{{ form.nitrogen.label }}</label>
+                    {{ form.nitrogen }}
+                    <div class="form-hint">mg/kg</div>
+                    {% if form.nitrogen.errors %}<div class="field-error">{{ form.nitrogen.errors.0 }}</div>{% endif %}
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="form-label">{{ form.phosphorus.label }}</label>
+                    {{ form.phosphorus }}
+                    <div class="form-hint">mg/kg</div>
+                    {% if form.phosphorus.errors %}<div class="field-error">{{ form.phosphorus.errors.0 }}</div>{% endif %}
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="form-label">{{ form.potassium.label }}</label>
+                    {{ form.potassium }}
+                    <div class="form-hint">mg/kg</div>
+                    {% if form.potassium.errors %}<div class="field-error">{{ form.potassium.errors.0 }}</div>{% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Climate -->
+              <div class="param-group mb-4">
+                <div class="param-group-label">
+                  <i class="bi bi-cloud-sun me-2"></i>Climate Conditions
+                </div>
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label class="form-label">{{ form.temperature.label }}</label>
+                    {{ form.temperature }}
+                    <div class="form-hint">°C</div>
+                    {% if form.temperature.errors %}<div class="field-error">{{ form.temperature.errors.0 }}</div>{% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">{{ form.humidity.label }}</label>
+                    {{ form.humidity }}
+                    <div class="form-hint">%</div>
+                    {% if form.humidity.errors %}<div class="field-error">{{ form.humidity.errors.0 }}</div>{% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">{{ form.ph.label }}</label>
+                    {{ form.ph }}
+                    <div class="form-hint">0–14</div>
+                    {% if form.ph.errors %}<div class="field-error">{{ form.ph.errors.0 }}</div>{% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label">{{ form.rainfall.label }}</label>
+                    {{ form.rainfall }}
+                    <div class="form-hint">mm/year</div>
+                    {% if form.rainfall.errors %}<div class="field-error">{{ form.rainfall.errors.0 }}</div>{% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <button type="submit" class="btn cs-btn-primary w-100 btn-lg" id="submitBtn">
+                <span class="btn-default-text">
+                  <i class="bi bi-cpu me-2"></i>Predict Best Crop
+                </span>
+                <span class="btn-loading-text d-none">
+                  <span class="spinner-border spinner-border-sm me-2"></span>Analyzing...
+                </span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RESULT + SIDEBAR ───────────────────────────────────────── -->
+      <div class="col-lg-5">
+
+        <!-- Result Card -->
+        {% if result %}
+        <div class="result-card mb-4 animate-result">
+          <div class="result-header">
+            <span class="result-tag">✅ Recommendation Ready</span>
+          </div>
+          <div class="result-body text-center">
+            <div class="result-emoji">{{ result.emoji }}</div>
+            <div class="result-label">Recommended Crop</div>
+            <div class="result-crop">{{ result.crop_display }}</div>
+            <p class="result-desc">{{ result.description }}</p>
+          </div>
+          <div class="result-footer">
+            <a href="{% url 'history' %}" class="btn cs-btn-outline w-100">
+              <i class="bi bi-clock-history me-2"></i>View Full History
+            </a>
+          </div>
+        </div>
+        {% else %}
+        <div class="result-placeholder mb-4">
+          <div class="rp-icon">🌿</div>
+          <div class="rp-title">Result will appear here</div>
+          <div class="rp-subtitle">Fill in the parameters and click Predict</div>
+        </div>
+        {% endif %}
+
+        <!-- Quick Stats -->
+        <div class="cs-card">
+          <div class="cs-card-header">
+            <h6><i class="bi bi-clock-history me-2"></i>Recent Predictions</h6>
+            <a href="{% url 'history' %}" class="btn-link-sm">View all</a>
+          </div>
+          <div class="cs-card-body p-0">
+            {% if recent_predictions %}
+            <ul class="prediction-mini-list">
+              {% for p in recent_predictions %}
+              <li class="pml-item">
+                <span class="pml-crop">{{ p.predicted_crop|capfirst }}</span>
+                <span class="pml-date">{{ p.created_at|date:"d M" }}</span>
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <div class="empty-state p-4 text-center">
+              <p class="text-muted mb-0"><small>No predictions yet. Make your first one!</small></p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('predictionForm').addEventListener('submit', function() {
+  const btn = document.getElementById('submitBtn');
+  btn.querySelector('.btn-default-text').classList.add('d-none');
+  btn.querySelector('.btn-loading-text').classList.remove('d-none');
+  btn.disabled = true;
+});
+
+// Scroll to result on mobile
+{% if result %}
+if (window.innerWidth < 992) {
+  document.querySelector('.result-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+{% endif %}
+</script>
+{% endblock %}

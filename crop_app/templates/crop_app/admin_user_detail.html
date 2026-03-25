@@ -1,0 +1,64 @@
+{% extends 'crop_app/base.html' %}
+{% block title %}User Detail — CropSense Admin{% endblock %}
+
+{% block content %}
+<section class="dashboard-section py-5">
+  <div class="container">
+    <div class="page-header mb-4">
+      <div>
+        <h2 class="page-title">{{ target_user.get_full_name|default:target_user.username }}</h2>
+        <p class="page-subtitle">{{ target_user.email }} · Joined {{ target_user.date_joined|date:"d F Y" }}</p>
+      </div>
+      <a href="{% url 'admin_dashboard' %}" class="btn cs-btn-outline">← Back to Admin</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-sm-4">
+        <div class="stat-card">
+          <div class="sc-value">{{ predictions.count }}</div>
+          <div class="sc-label">Total Predictions</div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="stat-card">
+          <div class="sc-value">{{ target_user.phone|default:"—" }}</div>
+          <div class="sc-label">Phone</div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="stat-card">
+          <div class="sc-value">{{ target_user.location|default:"—" }}</div>
+          <div class="sc-label">Location</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cs-card">
+      <div class="cs-card-header">
+        <h5>Prediction History</h5>
+      </div>
+      <div class="table-responsive">
+        <table class="table cs-table mb-0">
+          <thead>
+            <tr><th>#</th><th>Crop</th><th>N</th><th>P</th><th>K</th><th>Temp</th><th>Humidity</th><th>pH</th><th>Rainfall</th><th>Date</th></tr>
+          </thead>
+          <tbody>
+            {% for p in predictions %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td><span class="crop-tag">{{ p.predicted_crop|capfirst }}</span></td>
+              <td>{{ p.nitrogen }}</td><td>{{ p.phosphorus }}</td><td>{{ p.potassium }}</td>
+              <td>{{ p.temperature }}°</td><td>{{ p.humidity }}%</td>
+              <td>{{ p.ph }}</td><td>{{ p.rainfall }}</td>
+              <td><small class="text-muted">{{ p.created_at|date:"d M Y, H:i" }}</small></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="10" class="text-center text-muted py-4">No predictions found.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

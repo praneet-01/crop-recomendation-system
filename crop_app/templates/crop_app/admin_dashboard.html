@@ -1,0 +1,162 @@
+{% extends 'crop_app/base.html' %}
+{% block title %}Admin Dashboard — CropSense{% endblock %}
+
+{% block content %}
+<section class="dashboard-section py-5">
+  <div class="container">
+
+    <div class="page-header mb-4">
+      <div>
+        <h2 class="page-title">
+          <i class="bi bi-shield-check text-warning me-2"></i>Admin Dashboard
+        </h2>
+        <p class="page-subtitle">System overview and monitoring</p>
+      </div>
+      <a href="/admin/" class="btn cs-btn-outline">
+        <i class="bi bi-tools me-1"></i> Django Admin
+      </a>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4">
+      <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+          <div class="sc-icon" style="background: rgba(34,197,94,0.15); color: #16a34a;">
+            <i class="bi bi-people"></i>
+          </div>
+          <div class="sc-value">{{ total_users }}</div>
+          <div class="sc-label">Total Users</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+          <div class="sc-icon" style="background: rgba(59,130,246,0.15); color: #2563eb;">
+            <i class="bi bi-cpu"></i>
+          </div>
+          <div class="sc-value">{{ total_predictions }}</div>
+          <div class="sc-label">Total Predictions</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+          <div class="sc-icon" style="background: rgba(249,115,22,0.15); color: #ea580c;">
+            <i class="bi bi-calendar-week"></i>
+          </div>
+          <div class="sc-value">{{ recent_count }}</div>
+          <div class="sc-label">Last 7 Days</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+          <div class="sc-icon" style="background: rgba(168,85,247,0.15); color: #7c3aed;">
+            <i class="bi bi-bar-chart"></i>
+          </div>
+          <div class="sc-value">{{ top_crops|length }}</div>
+          <div class="sc-label">Unique Crops</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Top Crops -->
+      <div class="col-lg-4">
+        <div class="cs-card h-100">
+          <div class="cs-card-header">
+            <h5><i class="bi bi-trophy me-2"></i>Top Predicted Crops</h5>
+          </div>
+          <div class="cs-card-body">
+            {% for crop in top_crops %}
+            <div class="top-crop-item">
+              <span class="tc-rank">{{ forloop.counter }}</span>
+              <span class="tc-name">{{ crop.predicted_crop|capfirst }}</span>
+              <span class="tc-count">{{ crop.count }}</span>
+            </div>
+            {% empty %}
+            <p class="text-muted text-center">No predictions yet</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Latest Predictions -->
+      <div class="col-lg-8">
+        <div class="cs-card">
+          <div class="cs-card-header">
+            <h5><i class="bi bi-clock-history me-2"></i>Latest Predictions</h5>
+            <a href="{% url 'admin_all_predictions' %}" class="btn-link-sm">View all</a>
+          </div>
+          <div class="table-responsive">
+            <table class="table cs-table mb-0">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Crop</th>
+                  <th>N/P/K</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for p in latest_predictions %}
+                <tr>
+                  <td>
+                    <a href="{% url 'admin_user_detail' p.user.id %}">
+                      {{ p.user.get_full_name|default:p.user.username }}
+                    </a>
+                  </td>
+                  <td><span class="crop-tag">{{ p.predicted_crop|capfirst }}</span></td>
+                  <td class="text-muted"><small>{{ p.nitrogen }}/{{ p.phosphorus }}/{{ p.potassium }}</small></td>
+                  <td class="text-muted"><small>{{ p.created_at|date:"d M, H:i" }}</small></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Users -->
+      <div class="col-12">
+        <div class="cs-card">
+          <div class="cs-card-header">
+            <h5><i class="bi bi-people me-2"></i>Registered Users</h5>
+          </div>
+          <div class="table-responsive">
+            <table class="table cs-table mb-0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Location</th>
+                  <th>Predictions</th>
+                  <th>Joined</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for u in all_users %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ u.get_full_name|default:"—" }}</td>
+                  <td>{{ u.username }}</td>
+                  <td>{{ u.email }}</td>
+                  <td>{{ u.location|default:"—" }}</td>
+                  <td><span class="badge cs-badge-green">{{ u.predictions.count }}</span></td>
+                  <td class="text-muted"><small>{{ u.date_joined|date:"d M Y" }}</small></td>
+                  <td>
+                    <a href="{% url 'admin_user_detail' u.id %}" class="btn btn-sm cs-btn-outline">View</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+.env
+
+# Django
+db.sqlite3
+*.sqlite3
+staticfiles/
+media/
+
+# ML Model (too large for git)
+model_store/model.pkl
+*.pkl
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Setup scripts (optional)
+setup.bat
+setup.sh

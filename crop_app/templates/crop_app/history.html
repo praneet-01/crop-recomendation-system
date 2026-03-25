@@ -1,0 +1,70 @@
+{% extends 'crop_app/base.html' %}
+{% block title %}Prediction History — CropSense{% endblock %}
+
+{% block content %}
+<section class="dashboard-section py-5">
+  <div class="container">
+
+    <div class="page-header mb-4">
+      <div>
+        <h2 class="page-title">Prediction History</h2>
+        <p class="page-subtitle">All {{ predictions.count }} prediction{{ predictions.count|pluralize }} you've made</p>
+      </div>
+      <a href="{% url 'dashboard' %}" class="btn cs-btn-primary">
+        <i class="bi bi-plus me-1"></i> New Prediction
+      </a>
+    </div>
+
+    {% if predictions %}
+    <div class="cs-card">
+      <div class="table-responsive">
+        <table class="table cs-table mb-0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Crop</th>
+              <th>N</th>
+              <th>P</th>
+              <th>K</th>
+              <th>Temp</th>
+              <th>Humidity</th>
+              <th>pH</th>
+              <th>Rainfall</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in predictions %}
+            <tr>
+              <td class="text-muted">{{ forloop.counter }}</td>
+              <td>
+                <span class="crop-tag">{{ p.predicted_crop|capfirst }}</span>
+              </td>
+              <td>{{ p.nitrogen }}</td>
+              <td>{{ p.phosphorus }}</td>
+              <td>{{ p.potassium }}</td>
+              <td>{{ p.temperature }}°C</td>
+              <td>{{ p.humidity }}%</td>
+              <td>{{ p.ph }}</td>
+              <td>{{ p.rainfall }}mm</td>
+              <td class="text-muted">
+                <small>{{ p.created_at|date:"d M Y, H:i" }}</small>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    <div class="empty-page-state">
+      <div class="eps-icon">📋</div>
+      <h4>No predictions yet</h4>
+      <p>Start by entering your soil parameters on the dashboard.</p>
+      <a href="{% url 'dashboard' %}" class="btn cs-btn-primary">Go to Dashboard</a>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}
