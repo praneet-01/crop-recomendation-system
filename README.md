@@ -239,4 +239,4 @@ Then place `model.pkl` in the `model_store/` directory.
 
 ---
 
-*Final Year B.E. Project — Crop Recommendation System*
+* Crop Recommendation System*
