@@ -1,5 +1,5 @@
 # 🌱 CropSense — AI Crop Recommendation System
-### Final Year Engineering Project | Django + Scikit-learn + Bootstrap
+### Django + Scikit-learn + Bootstrap
 
 ---
 
