@@ -16,9 +16,7 @@ db.sqlite3
 staticfiles/
 media/
 
-# ML Model (too large for git)
-model_store/model.pkl
-*.pkl
+# ML Model (included in repo)
 
 # IDE / OS
 .vscode/
