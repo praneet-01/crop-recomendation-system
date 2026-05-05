@@ -1,0 +1,50 @@
+.page { min-height: 100vh; background: var(--color-surface); }
+.main { padding: var(--space-12) 0 var(--space-16); }
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-8); flex-wrap: wrap; gap: var(--space-4); }
+.header h1 { font-size: var(--font-size-2xl); margin-bottom: var(--space-1); }
+.header p { color: var(--color-text-secondary); }
+.newBtn {
+  background: var(--color-primary);
+  color: #fff;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  transition: background var(--transition-base);
+}
+.newBtn:hover { background: var(--color-primary-dark); color: #fff; }
+
+.errorMsg { color: var(--color-error); background: var(--color-error-bg); padding: var(--space-4); border-radius: var(--radius-md); }
+
+.empty { text-align: center; padding: var(--space-16) var(--space-8); }
+.emptyIcon { font-size: 3rem; margin-bottom: var(--space-4); }
+.empty h3 { font-size: var(--font-size-xl); margin-bottom: var(--space-3); }
+.empty p { color: var(--color-text-secondary); margin-bottom: var(--space-6); }
+.emptyLink { color: var(--color-primary); font-weight: var(--font-weight-semibold); }
+
+.tableCard { overflow: hidden; }
+.tableWrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; font-size: var(--font-size-sm); }
+.table th {
+  background: var(--color-surface);
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+.table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: var(--color-surface); }
+.cropCell { font-weight: var(--font-weight-medium); }
+.cropName { text-transform: capitalize; }
+.dateCell { color: var(--color-text-secondary); }

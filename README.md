@@ -1,242 +1,207 @@
-# 🌱 CropSense — AI Crop Recommendation System
-### Final Year Engineering Project | Django + Scikit-learn + Bootstrap
+# � AgriTech — AI-Powered Crop Recommendation System
+
+> A full-stack web application that uses a trained Random Forest ML model to recommend the most suitable crop based on soil and climate parameters.
+
+**Stack:** React 18 + Vite (frontend) · Django REST Framework + JWT (backend) · scikit-learn Random Forest (ML) · SQLite (database)
 
 ---
 
 ## 📁 Project Structure
 
 ```
-crop_project/
+AgriTech/
 ├── manage.py
 ├── requirements.txt
-├── db.sqlite3                  ← auto-created after migrations
+├── db.sqlite3                        ← auto-created after migrations
 ├── model_store/
-│   └── model.pkl               ← ⚠️ PLACE YOUR MODEL HERE
-├── crop_project/               ← Django project config
-│   ├── __init__.py
+│   └── model.pkl                     ← trained ML model
+├── crop_project/                     ← Django project config
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-├── crop_app/                   ← Main application
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── forms.py
-│   ├── ml_utils.py             ← ML model loading & prediction
-│   ├── models.py               ← CustomUser + PredictionHistory
-│   ├── urls.py
-│   ├── views.py
-│   ├── migrations/
-│   └── templates/
-│       └── crop_app/
-│           ├── base.html
-│           ├── landing.html
-│           ├── signup.html
-│           ├── login.html
-│           ├── dashboard.html
-│           ├── history.html
-│           ├── profile.html
-│           ├── change_password.html
-│           ├── about.html
-│           ├── contact.html
-│           ├── admin_dashboard.html
-│           ├── admin_user_detail.html
-│           └── admin_all_predictions.html
-└── static/
-    ├── css/
-    │   └── style.css
-    └── js/
-        └── main.js
+├── crop_app/                         ← Django app (models, ML utils)
+│   ├── models.py                     ← CustomUser + PredictionHistory
+│   ├── ml_utils.py                   ← ML model loading & prediction
+│   └── migrations/
+├── api/                              ← Django REST Framework API
+│   ├── urls.py                       ← all /api/ routes
+│   ├── permissions.py
+│   ├── serializers/
+│   │   ├── auth.py
+│   │   ├── prediction.py
+│   │   ├── profile.py
+│   │   └── admin.py
+│   └── views/
+│       ├── auth.py
+│       ├── prediction.py
+│       ├── history.py
+│       ├── profile.py
+│       └── admin.py
+└── frontend/                         ← React 18 + Vite SPA
+    ├── index.html
+    ├── vite.config.js
+    ├── package.json
+    └── src/
+        ├── main.jsx
+        ├── App.jsx
+        ├── api/                      ← Axios API functions
+        ├── context/                  ← AuthContext (JWT state)
+        ├── components/               ← Reusable UI components
+        ├── pages/                    ← All page components
+        └── styles/                   ← CSS Modules + design tokens
 ```
 
 ---
 
-## ⚙️ Setup Instructions (Step by Step)
+## ⚙️ Setup & Running
 
-### Step 1 — Clone / Download the Project
-
-```bash
-cd Desktop
-# if using git:
-git clone <your-repo-url> crop_project
-cd crop_project
-```
+### Prerequisites
+- Python 3.10+
+- Node.js 18+
+- npm
 
 ---
 
-### Step 2 — Create a Virtual Environment
-
-```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
-
-# macOS / Linux
-python3 -m venv venv
-source venv/bin/activate
-```
-
----
-
-### Step 3 — Install Dependencies
+### Step 1 — Install Python dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-This installs:
-- Django 4.x
-- scikit-learn
-- pandas
-- numpy
-- Pillow
-
 ---
 
-### Step 4 — Place Your Trained Model
-
-Copy your trained `model.pkl` file into the `model_store/` folder:
-
-```
-crop_project/
-└── model_store/
-    └── model.pkl   ← paste it here
-```
-
-> ⚠️ If this file is missing, the prediction endpoint will show a clear error message.
-
----
-
-### Step 5 — Apply Migrations
+### Step 2 — Apply database migrations
 
 ```bash
-python manage.py makemigrations
 python manage.py migrate
 ```
 
-This creates:
-- `db.sqlite3` database
-- All required tables (CustomUser, PredictionHistory, etc.)
-
 ---
 
-### Step 6 — Create a Superuser (Admin)
+### Step 3 — Create an admin account
 
 ```bash
 python manage.py createsuperuser
 ```
 
-Enter username, email, and password. This account can:
-- Access the custom Admin Dashboard at `/admin-panel/`
-- Access the Django Admin panel at `/admin/`
+Enter a username, email, and password. Use this account to access the Admin Dashboard.
 
 ---
 
-### Step 7 — Run the Development Server
+### Step 4 — Install frontend dependencies
 
+```bash
+cd frontend
+npm install
+```
+
+---
+
+### Step 5 — Run both servers
+
+Open **two terminals**:
+
+**Terminal 1 — Django backend** (run from project root):
 ```bash
 python manage.py runserver
 ```
+Backend runs at: http://127.0.0.1:8000
 
-Open in browser: **http://127.0.0.1:8000**
-
----
-
-## 🌐 Application URLs
-
-| URL | Description |
-|-----|-------------|
-| `/` | Landing Page |
-| `/signup/` | User Registration |
-| `/login/` | User Login |
-| `/logout/` | Logout |
-| `/dashboard/` | Prediction Dashboard (auth required) |
-| `/history/` | Prediction History (auth required) |
-| `/profile/` | User Profile (auth required) |
-| `/about/` | About Page |
-| `/contact/` | Contact Page |
-| `/admin-panel/` | Custom Admin Dashboard (staff only) |
-| `/admin/` | Django Built-in Admin |
+**Terminal 2 — React frontend** (run from `frontend/` folder):
+```bash
+cd frontend
+npm run dev
+```
+Frontend runs at: http://localhost:5173
 
 ---
 
-## 🧪 Testing the ML Integration
+### Step 6 — Open the app
 
-After logging in, go to the Dashboard and try these sample values:
+Go to **http://localhost:5173** in your browser.
 
-**Rice:**
-- N=90, P=42, K=43, Temp=20.8, Humidity=82, pH=6.5, Rainfall=202
+---
 
-**Maize:**
-- N=77, P=52, K=17, Temp=22.6, Humidity=82, pH=6.0, Rainfall=100
+## 🌐 Pages
 
-**Coffee:**
-- N=101, P=28, K=29, Temp=23.7, Humidity=90, pH=6.9, Rainfall=141
+| Route | Description | Auth |
+|-------|-------------|------|
+| `/` | Landing page | Public |
+| `/about` | About AgriTech | Public |
+| `/contact` | Contact form | Public |
+| `/login` | Sign in | Guest only |
+| `/register` | Create account | Guest only |
+| `/dashboard` | Crop prediction form + result | Required |
+| `/history` | Past predictions | Required |
+| `/profile` | Edit profile + change password | Required |
+| `/admin` | Admin dashboard (stats, users) | Admin only |
+| `/admin/predictions` | All predictions | Admin only |
+| `/admin/users/:id` | User detail + history | Admin only |
+
+---
+
+## 🔌 API Endpoints
+
+All endpoints are prefixed with `/api/`.
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/api/auth/register/` | None | Register new user |
+| POST | `/api/auth/login/` | None | Login, returns JWT tokens |
+| POST | `/api/auth/logout/` | Required | Blacklist refresh token |
+| POST | `/api/auth/token/refresh/` | None | Refresh access token |
+| POST | `/api/predict/` | Required | Run ML prediction |
+| GET | `/api/history/` | Required | User's prediction history |
+| GET | `/api/profile/` | Required | Get profile |
+| PATCH | `/api/profile/` | Required | Update profile |
+| POST | `/api/profile/change-password/` | Required | Change password |
+| GET | `/api/admin/stats/` | Admin | Platform statistics |
+| GET | `/api/admin/users/` | Admin | All users |
+| GET | `/api/admin/users/<id>/` | Admin | User detail |
+| GET | `/api/admin/predictions/` | Admin | All predictions |
+
+---
+
+## 🧪 Sample Prediction Values
+
+Try these on the Dashboard after logging in:
+
+| Crop | N | P | K | Temp | Humidity | pH | Rainfall |
+|------|---|---|---|------|----------|----|----------|
+| Rice | 90 | 42 | 43 | 20.8 | 82 | 6.5 | 202 |
+| Maize | 77 | 52 | 17 | 22.6 | 82 | 6.0 | 100 |
+| Coffee | 101 | 28 | 29 | 23.7 | 90 | 6.9 | 141 |
+| Banana | 100 | 82 | 50 | 27.0 | 85 | 6.0 | 105 |
+| Cotton | 118 | 33 | 30 | 23.0 | 80 | 6.5 | 80 |
 
 ---
 
 ## 🔧 Troubleshooting
 
-### "Model file not found"
-→ Ensure `model.pkl` is in `crop_project/model_store/model.pkl`
+**"Model file not found"**
+→ Make sure `model.pkl` is in `model_store/model.pkl`
 
-### "No module named django"
-→ Activate your virtual environment first: `venv\Scripts\activate` (Windows)
+**"No module named django" or "No module named rest_framework"**
+→ Run `pip install -r requirements.txt`
 
-### "Table does not exist"
-→ Run: `python manage.py migrate`
+**"Table does not exist"**
+→ Run `python manage.py migrate`
 
-### Static files not loading
-→ Run: `python manage.py collectstatic` (for production)
-→ In development, make sure `DEBUG = True` in settings.py
+**CORS error in browser**
+→ Make sure Django is running on port 8000 and React on port 5173
 
-### Model prediction gives wrong feature names warning
-→ This is handled in `ml_utils.py` using a pandas DataFrame with named columns
-
----
-
-## 📦 Exporting Model from Google Colab
-
-If your model is still in Colab, download it with:
-
-```python
-import pickle
-from google.colab import files
-
-# Save the model
-with open('model.pkl', 'wb') as f:
-    pickle.dump(model, f)
-
-# Download it
-files.download('model.pkl')
-```
-
-Then place `model.pkl` in the `model_store/` directory.
+**Frontend shows blank page**
+→ Make sure you ran `npm install` inside the `frontend/` folder first
 
 ---
 
-## 🚀 Future Enhancements
-
-- Real-time weather API integration (OpenWeatherMap)
-- Crop yield prediction module
-- Fertilizer recommendation system
-- Mobile-responsive PWA
-- Multi-language support
-- REST API with Django REST Framework
-- Docker deployment
-
----
-
-## 🛠 Tech Stack
+## � Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | HTML5, CSS3, Bootstrap 5, JavaScript |
-| Backend | Django 4.x (Python) |
-| ML Model | Random Forest (Scikit-learn) |
-| Database | SQLite (dev) → PostgreSQL (prod) |
-| Auth | Django Custom User Model |
-| Fonts | Syne + DM Sans (Google Fonts) |
-
----
-
-*Final Year B.E. Project — Crop Recommendation System*
+| Frontend | React 18, Vite, React Router v6, Axios, CSS Modules |
+| Backend | Django 4.2, Django REST Framework, SimpleJWT |
+| ML Model | Random Forest (scikit-learn) |
+| Database | SQLite |
+| Auth | JWT (access + refresh tokens) |
+| Fonts | Inter (Google Fonts) |
